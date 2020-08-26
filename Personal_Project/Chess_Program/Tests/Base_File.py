@@ -4,6 +4,7 @@
 import pygame
 import random
 import os
+import Seek_codes
 
 #====Set=Some=Variables====#
 
@@ -96,112 +97,7 @@ class WKnight(pygame.sprite.Sprite):
                 self.tilex = tile.tilex
                 self.tiley = tile.tiley
     def seek(self):
-        self.available = []
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-
-        self.seekx += 2
-        self.seeky += 1
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                self.seektile = tile.name
-                self.available.append(self.seektile)
-
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-        self.seekx += 1
-        self.seeky += 2
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                self.seektile = tile.name
-                for peice in self.team:
-                    if peice.name is not self.name and peice.tile == tile.name:
-                        self.available.append(self.seektile)
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-        self.seekx += -2
-        self.seeky += -1
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                self.seektile = tile.name
-                self.available.append(self.seektile)
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-
-        self.seekx += -1
-        self.seeky += -2
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                self.seektile = tile.name
-                self.available.append(self.seektile)
-
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-        self.seekx += 1
-        self.seeky += -2
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                self.seektile = tile.name
-                self.available.append(self.seektile)
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-        self.seekx += -1
-        self.seeky += 2
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                    self.seektile = tile.name
-                    self.available.append(self.seektile)
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-        self.seekx += 2
-        self.seeky += -1
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                self.seektile = tile.name
-                self.available.append(self.seektile)
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-        self.seekx += -2
-        self.seeky += 1
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-        self.seekx += -2
-        self.seeky += 1
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                self.seektile = tile.name
-                self.available.append(self.seektile)
-        self.seekx = self.tilex
-        self.seeky = self.tiley
-        self.seektile = self.tile
-        self.seekx += 1
-        self.seeky += 2
-        self.seektile = 'x' + str(self.seekx)+ 'y'+str(self.seeky)
-        for tile in tiles:
-            if tile.name == self.seektile:
-                self.seektile = tile.name
-                self.available.append(self.seektile)
-
-
-        return self.available
+        return Seek_codes.wknightseek(self,tiles)
 
 
 
@@ -260,35 +156,35 @@ mousetile = "x0y0"
 #========================================Game=Loop=======================#
 running = True
 while running:
-    	all_sprites.update()
-    	screen.fill(BLUE)
-    	all_sprites.draw(screen)
-        peices.draw(screen)
-        draw_text(surf=screen,text='Knight Info:',y = 3,color=GREEN)
-        draw_text(surf=screen,text='Available Squares: '+str(wknight.seek())+',',size=13,color=GREEN,y = 30)
-        draw_text(surf=screen,text='Knight Position: '+ str(wknight.tile)+',',size=15,color=GREEN,y=45)
-        draw_text(surf=screen,text='Mouse Position: '+str(mousetile),size=15,color=GREEN,y=60)
-        draw_text(surf=screen,text='Number of Available Squares: '+str(len(wknight.seek())),size=15,color=GREEN,y=75)
-    	clock.tick(FPS)
+    all_sprites.update()
+    screen.fill(BLUE)
+    all_sprites.draw(screen)
+    peices.draw(screen)
+    # draw_text(surf=screen,text='Knight Info:',y = 3,color=GREEN)
+    # draw_text(surf=screen,text='Available Squares: '+str(wknight.seek())+',',size=13,color=GREEN,y = 30)
+    # draw_text(surf=screen,text='Knight Position: '+ str(wknight.tile)+',',size=15,color=GREEN,y=45)
+    # draw_text(surf=screen,text='Mouse Position: '+str(mousetile),size=15,color=GREEN,y=60)
+    # draw_text(surf=screen,text='Number of Available Squares: '+str(len(wknight.seek())),size=15,color=GREEN,y=75)
+    clock.tick(FPS)
+    for tile in tiles:
+        if tile.check_for_mouse():
+            mousetile = tile.name
+    for tile in tiles:
+       if tile.name in wknight.seek():
+           tile.colour = RED
 
-        for tile in tiles:
-            if tile.check_for_mouse():
-                mousetile = tile.name
-        for tile in tiles:
-           if tile.name in wknight.seek():
-               tile.colour = RED
-        for tile in tiles:
-            if tile.name == mousetile:
-                if tile.colour == BLACK:
-                    tile.colour = (30,100,30)
-                elif tile.colour == WHITE:
-                    tile.colour = (150,255,150)
-                elif tile.colour == RED:
-                    tile.colour = BROWN
-      	pygame.display.flip()
-    	for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    wknight.tile = mousetile
-                if event.type == pygame.QUIT:
-                    running = False
-                    pygame.quit()
+    for tile in tiles:
+        if tile.name == mousetile:
+            if tile.colour == BLACK:
+                tile.colour = (30,100,30)
+            elif tile.colour == WHITE:
+                tile.colour = (150,255,150)
+            elif tile.colour == RED:
+                tile.colour = BROWN
+    pygame.display.flip()
+    for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                wknight.tile = mousetile
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
