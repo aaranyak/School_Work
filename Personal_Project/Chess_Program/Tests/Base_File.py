@@ -41,6 +41,7 @@ white = pygame.sprite.Group()
 game_folder = os.path.dirname(__file__)
 peice_folder = os.path.join(os.path.join(game_folder,'Pictures'),'Chess')
 wkimage = pygame.transform.scale(pygame.image.load(os.path.join(peice_folder,'knightB.png')).convert(),(50,50))
+wrimage = pygame.transform.scale(pygame.image.load(os.path.join(peice_folder,'rookB.png')).convert(),(50,50))
 
 
 font_name = pygame.font.match_font('comic sans ms')
@@ -99,6 +100,31 @@ class WKnight(pygame.sprite.Sprite):
     def seek(self):
         return Seek_codes.wknightseek(self,tiles)
 
+#Create a simple rook
+
+class WRook(pygame.sprite.Sprite):
+    def __init__(self,tilex,tiley,name,image,team):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = image
+        self.tilex = tilex
+        self.tiley = tiley
+        self.name = name
+        self.tile = 'x' + str(self.tilex)+ 'y'+str(self.tiley)
+        self.colorkey = BLACK
+        self.rect = self.image.get_rect()
+        self.team = team
+        self.rect.center = (self.tilex * (TILESIZE / 2),self.tiley *(TILESIZE / 2))
+    def update(self):
+        self.teleport(self.tile)
+    def teleport(self,tilename):
+        for tile in tiles:
+            if tile.name == tilename:
+                self.rect.center = tile.rect.center
+                self.tilex = tile.tilex
+                self.tiley = tile.tiley
+    def seek(self):
+        return []
+
 
 
 
@@ -144,33 +170,55 @@ def create_board():
 #Create the game board
 create_board()
 
+def findpeice(pname):
+    for peice in peices:
+        if peice.name == pname:
+            return peice
+
 #Create a knight
 wknight = WKnight(2,7,'wknight1',wkimage,white)
 all_sprites.add(wknight)
 peices.add(wknight)
 white.add(wknight)
 
+wknight2 = WKnight(7,7,'wknight2',wkimage,white)
+all_sprites.add(wknight2)
+peices.add(wknight2)
+white.add(wknight2)
+
+#Create a rook
+
+for i in range(4):
+    wrook1 = WRook(random.randrange(1,8),random.randrange(1,8),'wrook'+str(i),wrimage,white)
+    all_sprites.add(wrook1)
+    peices.add(wrook1)
+    white.add(wrook1)
+
 #==define some variables====#
 mousetile = "x0y0"
 
+acpeice = "wknight1"
+
 #========================================Game=Loop=======================#
+
+
 running = True
 while running:
     all_sprites.update()
     screen.fill(BLUE)
     all_sprites.draw(screen)
     peices.draw(screen)
-    # draw_text(surf=screen,text='Knight Info:',y = 3,color=GREEN)
-    # draw_text(surf=screen,text='Available Squares: '+str(wknight.seek())+',',size=13,color=GREEN,y = 30)
-    # draw_text(surf=screen,text='Knight Position: '+ str(wknight.tile)+',',size=15,color=GREEN,y=45)
-    # draw_text(surf=screen,text='Mouse Position: '+str(mousetile),size=15,color=GREEN,y=60)
-    # draw_text(surf=screen,text='Number of Available Squares: '+str(len(wknight.seek())),size=15,color=GREEN,y=75)
+    draw_text(surf=screen,text='Peice Info:',y = 3,color=GREEN)
+    draw_text(surf=screen,text='Available Squares: '+str(findpeice(acpeice).seek())+',',size=13,color=GREEN,y = 30)
+    draw_text(surf=screen,text='Knight Position: '+ str(findpeice(acpeice).tile)+',',size=15,color=GREEN,y=45)
+    draw_text(surf=screen,text='Mouse Position: '+str(mousetile),size=15,color=GREEN,y=60)
+    draw_text(surf=screen,text='Number of Available Squares: '+str(len(findpeice(acpeice).seek())),size=15,color=GREEN,y=75)
     clock.tick(FPS)
     for tile in tiles:
         if tile.check_for_mouse():
             mousetile = tile.name
     for tile in tiles:
-       if tile.name in wknight.seek():
+       if tile.name in findpeice(acpeice).seek():
            tile.colour = RED
 
     for tile in tiles:
@@ -184,7 +232,13 @@ while running:
     pygame.display.flip()
     for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                wknight.tile = mousetile
+                if mousetile in findpeice(acpeice).seek():
+                    findpeice(acpeice).tile = mousetile
             if event.type == pygame.QUIT:
                 running = False
                 pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    for peice in peices:
+                        if peice.tile == mousetile:
+                            acpeice = peice.name
